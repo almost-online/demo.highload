@@ -11,14 +11,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 
-class DefaultController extends FOSRestController
+class DefaultController
 {
 
     public function indexAction()
     {
-        $view = new View(array('date' => date('r'), 'name' => 'some name'));
-        $view->setTemplate('APIUserBundle:Default:index.html.twig');
-        return $this->get('fos_rest.view_handler')->handle($view);
+        $view = View::create();
+
+        $view->setData(array('date' => date('r'), 'name' => 'some name'));
+        $view->setTemplate('APIUserBundle:Default:index.html.twig')
+            ->setTemplateData(array('name' => 'some name'));
+
+        return $view;
     }
 
 //    public function allAction()
