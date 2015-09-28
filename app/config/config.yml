@@ -15,6 +15,7 @@ framework:
     serializer:
         enabled: true
         enable_annotations: true
+        cache: serializer.mapping.cache.apc
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -90,10 +91,51 @@ fos_user:
     user_class: 'API\UserBundle\Entity\User'
 
 fos_rest:
-    routing_loader:
-        default_format: json
-    format_listener: true
+    unauthorized_challenge: "Basic realm=\"Restricted Area\""
     view:
-        view_response_listener: force
+#        default_engine: php
+        view_response_listener: true
+        force_redirects:
+          html: true
+#          xml: true
+        formats:
+            jsonp: true
+            json: true
+            xml: true
+            rss: false
         templating_formats:
             html: true
+        mime_types:
+            json: ['application/json', 'application/x-json', 'application/vnd.example-com.foo+json']
+            jsonp: 'application/javascript+jsonp'
+            rss: 'application/rss+xml'
+            jpg: 'image/jpeg'
+            png: 'image/png'
+        jsonp_handler: ~
+    body_listener: true
+    param_fetcher_listener: force
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    format_listener:
+        rules:
+            - { path: ^/api/user, priorities: [html, json, xml], fallback_format: ~, prefer_extension: false }
+            - { path: ^/, priorities: [ html, json, xml ], fallback_format: ~, prefer_extension: true }
+    routing_loader:
+        default_format: ~
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    service:
+        view_handler: api_user.view_handler
+    serializer:
+#        version: 1.0
+#        groups: [data]
+
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+    request: { converters: true }
