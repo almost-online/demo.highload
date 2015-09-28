@@ -1,0 +1,11 @@
+API\UserBundle\Entity\User:
+        constraints:
+            - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+        properties:
+            email:
+                - Email: ~
+            file:
+                - Image:
+                    maxSize: 1024k
+                    uploadFormSizeErrorMessage: Too large file
+                    mimeTypesMessage: Please upload valid image

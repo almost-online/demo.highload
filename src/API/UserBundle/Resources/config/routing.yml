@@ -1,0 +1,21 @@
+api_user_index:
+    pattern:  /
+    defaults: { _controller: APIUserBundle:Default:index, _format: ~ }
+    requirements:
+        _method: GET
+
+api_user_all:
+    pattern:  /all
+    defaults: { _controller: APIUserBundle:Default:all, _format: ~ }
+    requirements:
+        _method: GET
+
+api_user_get:
+    pattern:  /{id}
+    defaults: { _controller: APIUserBundle:Default:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
