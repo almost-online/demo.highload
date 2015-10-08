@@ -1,5 +1,5 @@
 #!/bin/sh
-git pull
+# git pull
 php app/console --env=prod cache:clear
 php app/console  assets:install
 php app/console  assetic:dump
