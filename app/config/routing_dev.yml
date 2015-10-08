@@ -1,5 +1,5 @@
 _welcome:
-    pattern:  /
+    path:  /
     defaults:
         _controller: FrameworkBundle:Redirect:redirect
         route: get_notes
